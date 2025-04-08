@@ -7,6 +7,7 @@ public class playerMovementScript : MonoBehaviour
     public Rigidbody2D playerRB;
     public BoxCollider2D groundCheck;
     public LayerMask groundMask;
+    public Animator animator;
     public float moveSpeed = 5;
     public float jumpSpeed = 8;
    public CollectLetter cm;
@@ -36,6 +37,8 @@ public class playerMovementScript : MonoBehaviour
     }
 
     void MoveWithInput() {
+        animator.SetFloat("Speed", Mathf.Abs(moveX));
+
         if (Mathf.Abs(moveX) > 0) {
             playerRB.linearVelocity = new Vector2(moveX * moveSpeed, playerRB.linearVelocity.y);
 
@@ -52,6 +55,7 @@ public class playerMovementScript : MonoBehaviour
 
     void CheckGround() {
         grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
+        animator.SetBool("IsJumping", !grounded);
     }
 
     void ApplyFriction() {
