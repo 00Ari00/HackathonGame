@@ -5,48 +5,57 @@ public class playerMovementScript : MonoBehaviour
 {
 
     public Rigidbody2D playerRB;
+    public BoxCollider2D groundCheck;
+    public LayerMask groundMask;
     public float moveSpeed = 5;
-    public float velocity;
-    public float drag = 0.9f;
+    public float jumpSpeed = 8;
+    [Range(0f, 1f)]
+    public float groundDecay = 0.5f;
     public bool grounded;
-    private Vector2 moveDirection;
+    private float moveX;
+    private float moveY;
+    
     // Update is called once per frame
     void Update()
     {
-        ProcessInputs();
-
+        GetInputs();
+        HandleJump();
     }
 
     void FixedUpdate()
     {
-        Move();
+        CheckGround();
+        ApplyFriction(); 
+        MoveWithInput();
     }
 
-    void ProcessInputs() {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
-
-        moveDirection = new Vector2(moveX, moveY).normalized;
-        // using .normalized to ensure diagonal movement is not faster than vertical and horizontal movement
-
-        if (Mathf.Abs(moveDirection.x) > 0.1) {
-            playerRB.linearVelocity = new Vector2(moveDirection.x * moveSpeed, playerRB.linearVelocity.y);
-        }
-
-        if (Math.Abs(moveDirection.y) > 0.1) {
-            playerRB.linearVelocity = new Vector2(playerRB.linearVelocity.x, moveDirection.y * moveSpeed);
-        }
+    void GetInputs() {
+        moveX = Input.GetAxis("Horizontal");
+        moveY = Input.GetAxis("Vertical");
     }
 
-    void Move() {
-        checkGround();
+    void MoveWithInput() {
+        if (Mathf.Abs(moveX) > 0) {
+            playerRB.linearVelocity = new Vector2(moveX * moveSpeed, playerRB.linearVelocity.y);
 
-        if (grounded) {
-            playerRB.linearVelocity *= drag;
+            float playerDirection = Mathf.Sign(moveX);
+            transform.localScale = new Vector3(playerDirection, 1, 1);
         }
     }
 
-    void checkGround() {
-        
+    void HandleJump() {
+        if (moveY > 0 && grounded) {
+            playerRB.linearVelocity = new Vector2(playerRB.linearVelocity.x, jumpSpeed);
+        }
+    }
+
+    void CheckGround() {
+        grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
+    }
+
+    void ApplyFriction() {
+        if (grounded && moveX == 0 && moveY == 0) {
+            playerRB.linearVelocity *= groundDecay;
+        }
     }
 }
