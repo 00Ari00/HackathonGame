@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class playerMovementScript : MonoBehaviour
@@ -7,6 +8,8 @@ public class playerMovementScript : MonoBehaviour
     public float moveSpeed = 5;
     public float velocity;
     private Vector2 moveDirection;
+    private float moveX;
+    private float moveY;
 
     // Update is called once per frame
     void Update()
@@ -22,14 +25,20 @@ public class playerMovementScript : MonoBehaviour
     }
 
     void ProcessInputs() {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
+        moveX = Input.GetAxis("Horizontal");
+        moveY = Input.GetAxis("Vertical");
 
-        // using .normalized to ensure diagonal movement is not faster than vertical and horizontal movement
         moveDirection = new Vector2(moveX, moveY).normalized;
+        // using .normalized to ensure diagonal movement is not faster than vertical and horizontal movement
     }
 
     void Move() {
-        playerRB.linearVelocity = moveDirection * moveSpeed;
+        if (Mathf.Abs(moveDirection.x) > 0.1) {
+            playerRB.linearVelocity = new Vector2(moveDirection.x * moveSpeed, playerRB.linearVelocity.y);
+        }
+
+        if (Math.Abs(moveDirection.y) > 0.1) {
+            playerRB.linearVelocity = new Vector2(playerRB.linearVelocity.x, moveDirection.y * moveSpeed);
+        }
     }
 }
