@@ -10,6 +10,7 @@ public class playerMovementScript : MonoBehaviour
     public Animator animator;
     public float moveSpeed = 5;
     public float jumpSpeed = 8;
+   public CollectLetter cm;
     [Range(0f, 1f)]
     public float groundDecay = 0.5f;
     public bool grounded;
@@ -60,6 +61,12 @@ public class playerMovementScript : MonoBehaviour
     void ApplyFriction() {
         if (grounded && moveX == 0 && moveY == 0) {
             playerRB.linearVelocity *= groundDecay;
+        }
+    }
+
+   private void OnTriggerEnter2D(Collider2D other){
+        if (other.gameObject.CompareTag("Collectible")) {
+            Destroy(other.gameObject);
         }
     }
 }
