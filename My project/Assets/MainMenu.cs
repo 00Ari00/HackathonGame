@@ -6,6 +6,6 @@ public class MainMenu : MonoBehaviour
    public void PlayGame()
     {
             Debug.Log("hjdsjkgsjk");
-        SceneManager.LoadSceneAsync(2);
+        SceneManager.LoadSceneAsync(1);
     }
 }
