@@ -461,7 +461,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &1826061958
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -511,7 +511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d545d8b0d6696487f81cf35b809294c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  playerRB: {fileID: 1826061957}
+  moveSpeed: 3.66
+  velocity: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
